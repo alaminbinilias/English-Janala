@@ -1,5 +1,4 @@
 
-
 //ClearSpecificButtonStyle
 
 const ClearAllButtonStyle=()=>{
@@ -62,7 +61,7 @@ const wordCardSection=(data)=>{
             <p class="-mt-2 mb-4 font-medium text-[1rem]">Meaning /Pronounciation</p>
             <p class="mb-15 text-[2rem] text-[#18181B] tiro font-thin">"${it.meaning==null ?"Meaning Not Found": it.meaning } / ${it.pronunciation==null ?"pronunciation Not Found": it.pronunciation}"</p>
             <div class="flex justify-between w-10/12 mx-auto mb-11">
-                <button class="px-3 py-2 bg-gray-300 rounded-sm cursor-pointer"><i class="fa-solid fa-circle-info"></i></button>
+                <button onclick="my_modal_1.showModal()" class="px-3 py-2 bg-gray-300 rounded-sm cursor-pointer"><i class="fa-solid fa-circle-info"></i></button>
                 <button class="px-3 py-2 bg-gray-300 rounded-sm cursor-pointer"><i class="fa-solid fa-volume-low"></i></button>
             </div>
         </div>
