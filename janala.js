@@ -1,3 +1,111 @@
+function pronounceWord(word) {
+  const utterance = new SpeechSynthesisUtterance(word);
+  utterance.lang = "en-EN"; // English
+  window.speechSynthesis.speak(utterance);
+}
+
+
+
+
+
+document.getElementById('InValue').addEventListener('click',()=>{
+            const Btn=document.querySelectorAll(".AllLessonBtn");
+            for(it of Btn){
+                it.disabled=true;
+            }
+        });
+
+document.getElementById('SBtn').addEventListener("click",()=>{
+    const inP=document.getElementById("InValue");
+    
+    const inPVlue=inP.value.trim().toLowerCase();
+    // console.log(inPVlue);
+    const url='https://openapi.programming-hero.com/api/words/all';
+    fetch(url)
+    .then(response => response.json())
+    .then(data=>{
+        const allword=data.data;
+        //console.log(allword);
+        const filterWord=allword.filter(it=>it.word.toLowerCase().includes(inPVlue));
+        // console.log(filterWord);
+        ClearAllButtonStyle();
+        document.getElementById('mendatory').classList.add('hidden');
+
+        wordCardSection(filterWord);
+
+    });
+});
+
+
+
+
+
+const spinner=(status)=>{
+    if(status===true){
+        document.getElementById('Spinner').classList.remove('hidden');
+        document.getElementById('wordCardSection').classList.add('hidden');
+    }
+}
+
+
+
+const displayWordSAll=(arr)=>{
+    const details= arr.map((it) =>`<span class='btn text-[1.2rem] font-medium'>${it}</span>`);
+    return(details.join(" "));
+}
+
+const wordDetalils=(id)=>{
+    const url=`https://openapi.programming-hero.com/api/word/${id}`;
+    fetch(url)
+    .then(response => response.json())
+    .then(data=> DisplayWordDetails(data.data));
+}
+
+const DisplayWordDetails=(data)=>{
+    //console.log(data);
+
+    //open Modal
+    document.getElementById('my_modal_1').showModal();
+    const details=document.getElementById('displaymodalDetails');
+    // console.log(details);
+
+//     {
+//   "status": true,
+//   "message": "successfully fetched a word details",
+//   "data": {
+//     "word": "Eager",
+//     "meaning": "আগ্রহী",
+//     "pronunciation": "ইগার",
+//     "level": 1,
+//     "sentence": "The kids were eager to open their gifts.",
+//     "points": 1,
+//     "partsOfSpeech": "adjective",
+//     "synonyms": [
+//       "enthusiastic",
+//       "excited",
+//       "keen"
+//     ],
+//     "id": 5
+//   }
+// }
+
+
+    details.innerHTML=`
+    <div class="border-2 border-red-100 p-5 rounded-md">
+    <p class="font-bold text-2xl mb-5 poppins tiro">${data.word} (<span><i class="fa-solid fa-microphone-lines"></i></span>:${data.pronunciation})</p>
+    <p class="font-semibold text-xl poppins mb-2">Meaning</p>
+    <p class="text-[1.3rem] tiro mb-2">${data.meaning}</p>
+    <p class="font-semibold text-xl poppins mb-2">Example</p>
+    <p class="text-[1.3rem] mb-4">${data.sentence}</p>
+    <p class="font-semibold text-xl tiro mb-3">সমার্থক শব্দ গুলো</p>
+    <div>
+        ${displayWordSAll(data.synonyms)}
+    </div>
+    </div>
+
+    `;
+}
+
 
 //ClearSpecificButtonStyle
 
@@ -16,8 +124,8 @@ const ClearAllButtonStyle=()=>{
 // For AllGridSection
 
 const cardSection=document.getElementById("wordCardSection");
+
 const LessonClickBtn=(level)=>{
-    
     //identify Spesific Button
 
     const SpecificButton=document.getElementById(`Btn${level}`);
@@ -61,8 +169,8 @@ const wordCardSection=(data)=>{
             <p class="-mt-2 mb-4 font-medium text-[1rem]">Meaning /Pronounciation</p>
             <p class="mb-15 text-[2rem] text-[#18181B] tiro font-thin">"${it.meaning==null ?"Meaning Not Found": it.meaning } / ${it.pronunciation==null ?"pronunciation Not Found": it.pronunciation}"</p>
             <div class="flex justify-between w-10/12 mx-auto mb-11">
-                <button onclick="my_modal_1.showModal()" class="px-3 py-2 bg-gray-300 rounded-sm cursor-pointer"><i class="fa-solid fa-circle-info"></i></button>
-                <button class="px-3 py-2 bg-gray-300 rounded-sm cursor-pointer"><i class="fa-solid fa-volume-low"></i></button>
+                <button onclick="wordDetalils(${it.id})" class="px-3 py-2 bg-gray-300 rounded-sm cursor-pointer"><i class="fa-solid fa-circle-info"></i></button>
+                <button onclick="pronounceWord('${it.word}')" class="px-3 py-2 bg-gray-300 rounded-sm cursor-pointer"><i class="fa-solid fa-volume-low"></i></button>
             </div>
         </div>
         `;
