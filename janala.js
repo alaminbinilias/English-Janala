@@ -4,10 +4,6 @@ function pronounceWord(word) {
   window.speechSynthesis.speak(utterance);
 }
 
-
-
-
-
 document.getElementById('InValue').addEventListener('click',()=>{
             const Btn=document.querySelectorAll(".AllLessonBtn");
             for(it of Btn){
@@ -41,7 +37,11 @@ document.getElementById('SBtn').addEventListener("click",()=>{
 
 
 const spinner=(status)=>{
-    if(status===true){
+    if(status==false){
+        document.getElementById('Spinner').classList.add('hidden');
+        document.getElementById('wordCardSection').classList.remove('hidden');
+    }
+    else{
         document.getElementById('Spinner').classList.remove('hidden');
         document.getElementById('wordCardSection').classList.add('hidden');
     }
@@ -127,7 +127,7 @@ const cardSection=document.getElementById("wordCardSection");
 
 const LessonClickBtn=(level)=>{
     //identify Spesific Button
-
+    // spinner(true);
     const SpecificButton=document.getElementById(`Btn${level}`);
     //console.log(SpecificButton);
     
@@ -157,6 +157,7 @@ const wordCardSection=(data)=>{
             <p class="mt-2 font-medium text-[2.5rem]">নেক্সট Lesson এ যান</p>
         </div>
         `;
+        spinner(false);
         return;
     }
 
@@ -175,7 +176,7 @@ const wordCardSection=(data)=>{
         </div>
         `;
         cardSection.appendChild(dv);
-
+        spinner(false);
     }
 }
 
